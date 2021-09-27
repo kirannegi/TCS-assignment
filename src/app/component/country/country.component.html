@@ -1,0 +1,17 @@
+<form [formGroup]="countryForm">
+  <label for="region">Region:</label>
+  <select formControlName="region" (change)="loadCountry($event.target.value)">
+    <option value="europe">Europe</option>
+    <option value="asia">Asia</option>
+  </select>
+  <label for="country">Country:</label>
+  <select formControlName="country" (change)="loadCountryInfo($event.target.value)">
+    <option selected *ngIf="(this.regionData$ | async).pending">loading...</option>
+    <ng-container *ngFor="let country of (this.regionData$ | async).data[countryForm.value.region]; let index = index">
+    <option [value]="index">{{country.name.common}}</option>
+  </ng-container>
+  </select>
+</form>
+
+<app-country-info *ngIf="selectedIndex != undefined" [countryInfo]="(this.regionData$ | async).data[countryForm.value.region][selectedIndex]"></app-country-info>
+
